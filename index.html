@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в Ярославле и Лаптево</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .weather-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .weather-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .location {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .location i {
+            color: var(--primary-color);
+        }
+        
+        .weather-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .temperature {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--dark-color);
+            position: relative;
+        }
+        
+        .temperature::after {
+            content: '°C';
+            position: absolute;
+            top: 0;
+            right: -1.2rem;
+            font-size: 1.5rem;
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            margin: 5px 0;
+            text-transform: capitalize;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .detail-item i {
+            color: var(--primary-color);
+            width: 20px;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+        
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            color: var(--error-color);
+            font-weight: 500;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        .api-key-info {
+            background-color: rgba(255, 253, 231, 0.8);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 40px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--warning-color);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .api-key-info strong {
+            color: var(--warning-color);
+        }
+        
+        .api-key-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .api-key-info a:hover {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+        
+        .refresh-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .refresh-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+        
+        .refresh-btn i {
+            margin-right: 8px;
+        }
+        
+        .time-info {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .weather-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .weather-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .weather-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .weather-card {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Дополнительные стили для разных погодных условий */
+        .sunny {
+            background: linear-gradient(135deg, rgba(255,213,79,0.1) 0%, rgba(255,255,255,0.9) 100%);
+        }
+        
+        .cloudy {
+            background: linear-gradient(135deg, rgba(189,189,189,0.1) 0%, rgba(255,255,255,0.9) 100%);
+        }
+        
+        .rainy {
+            background: linear-gradient(135deg, rgba(66,165,245,0.1) 0%, rgba(255,255,255,0.9) 100%);
+        }
+        
+        .snowy {
+            background: linear-gradient(135deg, rgba(179,229,252,0.1) 0%, rgba(255,255,255,0.9) 100%);
+        }
+        
+        .thunderstorm {
+            background: linear-gradient(135deg, rgba(103,58,183,0.1) 0%, rgba(255,255,255,0.9) 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-cloud-sun"></i> Погода в Ярославле и Лаптево</h1>
+        
+        <div class="weather-container">
+            <!-- Ярославль -->
+            <div class="weather-card" id="yaroslavl-card">
+                <div class="location"><i class="fas fa-city"></i> Ярославль</div>
+                <div id="yaroslavl-weather">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i><br>
+                        Загрузка данных...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Лаптево -->
+            <div class="weather-card" id="laptevo-card">
+                <div class="location"><i class="fas fa-home"></i> Лаптево (Ярославская обл.)</div>
+                <div id="laptevo-weather">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i><br>
+                        Загрузка данных...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="refresh-btn" id="refresh-btn"><i class="fas fa-sync-alt"></i> Обновить данные</button>
+        <div class="time-info" id="update-time"></div>
+
+        <div class="api-key-info">
+            <strong><i class="fas fa-info-circle"></i> Важно:</strong> Для работы этого кода нужен бесплатный API-ключ с сайта 
+            <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a>. 
+            После регистрации вставьте ваш ключ в строку <code>const apiKey = 'ВАШ_КЛЮЧ';</code>
+        </div>
+    </div>
+
+    <script>
+        // ВАЖНО: Замените этот ключ на свой бесплатный API-ключ от OpenWeatherMap
+        // Получить можно здесь: https://home.openweathermap.org/api_keys
+        const apiKey = '07c35e8e3b046470612ddd028efbf612'; // ← Замените здесь!
+        
+        // Обновленные координаты (точные)
+        const locations = {
+            yaroslavl: { 
+                lat: 57.626559, 
+                lon: 39.893813, 
+                elemId: 'yaroslavl-weather',
+                cardId: 'yaroslavl-card',
+                name: 'Ярославль'
+            },
+            laptevo: { 
+                lat: 57.474010, 
+                lon: 39.664204, 
+                elemId: 'laptevo-weather',
+                cardId: 'laptevo-card',
+                name: 'Лаптево'
+            }
+        };
+
+        // Функция для получения погоды
+        async function fetchWeather(location) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}&units=metric&lang=ru`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.cod === 200) {
+                    displayWeather(data, location.elemId, location.cardId, location.name);
+                    updateLastUpdated();
+                } else {
+                    showError(location.elemId, data.message || 'Неизвестная ошибка');
+                }
+            } catch (error) {
+                showError(location.elemId, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
+            }
+        }
+
+        // Функция для отображения погоды
+        function displayWeather(data, elementId, cardId, locationName) {
+            const element = document.getElementById(elementId);
+            const cardElement = document.getElementById(cardId);
+            const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+            
+            // Устанавливаем класс в зависимости от типа погоды
+            const weatherClass = getWeatherClass(data.weather[0].main);
+            cardElement.className = 'weather-card ' + weatherClass;
+            
+            const sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const sunsetTime = new Date(data.sys.sunset * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            element.innerHTML = `
+                <div class="weather-info">
+                    <div>
+                        <div class="temperature">${Math.round(data.main.temp)}</div>
+                        <div class="description">${capitalizeFirstLetter(data.weather[0].description)}</div>
+                        <div>Ощущается как: ${Math.round(data.main.feels_like)}°C</div>
+                    </div>
+                    <img src="${iconUrl}" alt="${data.weather[0].description}" class="weather-icon">
+                </div>
+                <div class="details">
+                    <div class="detail-item"><i class="fas fa-tint"></i> Влажность: ${data.main.humidity}%</div>
+                    <div class="detail-item"><i class="fas fa-wind"></i> Ветер: ${data.wind.speed} м/с, ${getWindDirection(data.wind.deg)}</div>
+                    <div class="detail-item"><i class="fas fa-thermometer-half"></i> Давление: ${Math.round(data.main.pressure * 0.75006375541921)} мм рт. ст.</div>
+                    <div class="detail-item"><i class="fas fa-cloud"></i> Облачность: ${data.clouds.all}%</div>
+                    <div class="detail-item"><i class="fas fa-temperature-low"></i> Мин.: ${Math.round(data.main.temp_min)}°C</div>
+                    <div class="detail-item"><i class="fas fa-temperature-high"></i> Макс.: ${Math.round(data.main.temp_max)}°C</div>
+                    <div class="detail-item"><i class="fas fa-sun"></i> Восход: ${sunriseTime}</div>
+                    <div class="detail-item"><i class="fas fa-moon"></i> Закат: ${sunsetTime}</div>
+                </div>
+            `;
+        }
+        
+        // Определяем класс для карточки в зависимости от погоды
+        function getWeatherClass(weatherMain) {
+            const weatherMap = {
+                'Clear': 'sunny',
+                'Clouds': 'cloudy',
+                'Rain': 'rainy',
+                'Drizzle': 'rainy',
+                'Thunderstorm': 'thunderstorm',
+                'Snow': 'snowy',
+                'Mist': 'cloudy',
+                'Smoke': 'cloudy',
+                'Haze': 'cloudy',
+                'Dust': 'cloudy',
+                'Fog': 'cloudy',
+                'Sand': 'cloudy',
+                'Ash': 'cloudy',
+                'Squall': 'rainy',
+                'Tornado': 'thunderstorm'
+            };
+            
+            return weatherMap[weatherMain] || '';
+        }
+
+        // Показать ошибку
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = 
+                `<div class="error"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`;
+        }
+
+        // Обновить время последнего обновления
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('update-time').textContent = 
+                `Последнее обновление: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+        }
+
+        // Вспомогательные функции
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function getWindDirection(degrees) {
+            const directions = ['С', 'СВ', 'В', 'ЮВ', 'Ю', 'ЮЗ', 'З', 'СЗ'];
+            return directions[Math.round(degrees / 45) % 8];
+        }
+
+        // Загружаем погоду при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.values(locations).forEach(location => {
+                fetchWeather(location);
+            });
+            
+            // Обновляем время сразу
+            updateLastUpdated();
+        });
+        
+        // Кнопка обновления
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            Object.values(locations).forEach(location => {
+                const element = document.getElementById(location.elemId);
+                element.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i><br>
+                        Обновление данных...
+                    </div>
+                `;
+                fetchWeather(location);
+            });
+        });
+    </script>
+</body>
+</html>
