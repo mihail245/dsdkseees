@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Погода</title>
+    <title>Погодное приложение</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -246,16 +246,6 @@
             text-align: center;
             border-radius: 8px;
             background-color: rgba(244, 67, 54, 0.1);
-        }
-        
-        .api-key-info {
-            background-color: rgba(255, 253, 231, 0.8);
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-top: 40px;
-            font-size: 0.95rem;
-            border-left: 4px solid var(--warning-color);
-            box-shadow: var(--card-shadow);
         }
         
         body.dark-mode .api-key-info {
@@ -800,6 +790,324 @@
         body.dark-mode .skeleton {
             background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
         }
+        
+        /* Стили для управления городами */
+        .locations-control {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+        
+        body.dark-mode .locations-control {
+            background: rgba(30, 30, 30, 0.9);
+            color: var(--dark-text);
+        }
+        
+        .locations-control h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        body.dark-mode .locations-control h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .locations-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .locations-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        body.dark-mode .locations-form input {
+            background-color: #333;
+            border-color: #555;
+            color: var(--dark-text);
+        }
+        
+        .locations-form button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 120px;
+        }
+        
+        .locations-form button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .saved-locations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .location-tag {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .location-tag button {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 8px;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.8rem;
+        }
+        
+        .location-tag button:hover {
+            color: #ffeb3b;
+        }
+        
+        /* Подсказка для координат */
+        .coordinates-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        body.dark-mode .coordinates-hint {
+            color: #aaa;
+        }
+        
+        /* Стили для выбора типа местоположения */
+        .location-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .location-type label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .location-type input[type="radio"] {
+            margin: 0;
+        }
+
+        /* Стили для виджета "Погода сейчас" */
+        .current-weather-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            z-index: 100;
+            width: 200px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .current-weather-widget {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+        }
+        
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .widget-title {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        body.dark-mode .widget-title {
+            color: var(--accent-color);
+        }
+        
+        .widget-close {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        body.dark-mode .widget-close {
+            color: #aaa;
+        }
+        
+        .widget-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .widget-temp {
+            font-size: 2rem;
+            font-weight: 300;
+            margin: 5px 0;
+        }
+        
+        .widget-icon {
+            width: 60px;
+            height: 60px;
+            margin: 5px 0;
+        }
+        
+        .widget-desc {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+        
+        .widget-details {
+            font-size: 0.8rem;
+            width: 100%;
+        }
+        
+        .widget-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+        }
+        
+        /* Анимации для иконок погоды */
+        @keyframes rain {
+            0% { transform: translateY(-5px); }
+            50% { transform: translateY(5px); }
+            100% { transform: translateY(-5px); }
+        }
+        
+        @keyframes snow {
+            0% { transform: translateY(-5px) rotate(0deg); }
+            50% { transform: translateY(5px) rotate(10deg); }
+            100% { transform: translateY(-5px) rotate(0deg); }
+        }
+        
+        @keyframes thunder {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes sun {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes cloud {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .weather-icon.animated, .hourly-icon.animated, .daily-icon.animated {
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+        
+        .rain-animation {
+            animation-name: rain;
+        }
+        
+        .snow-animation {
+            animation-name: snow;
+        }
+        
+        .thunder-animation {
+            animation-name: thunder;
+            animation-duration: 1s;
+        }
+        
+        .sun-animation {
+            animation-name: sun;
+            animation-duration: 20s;
+        }
+        
+        .cloud-animation {
+            animation-name: cloud;
+        }
+        
+        /* Стили для уведомлений о погодных явлениях */
+        .weather-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--warning-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 80%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .weather-alert.show {
+            opacity: 1;
+        }
+        
+        .weather-alert i {
+            font-size: 1.2rem;
+        }
+        
+        .weather-alert .alert-close {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .weather-alert.warning {
+            background-color: var(--warning-color);
+        }
+        
+        .weather-alert.danger {
+            background-color: var(--error-color);
+        }
+        
+        .weather-alert.info {
+            background-color: var(--primary-color);
+        }
+        
+        body.dark-mode .weather-alert.info {
+            background-color: var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -807,91 +1115,71 @@
         <div class="progress-bar" id="progress-bar"></div>
     </div>
     
+    <!-- Виджет "Погода сейчас" -->
+    <div class="current-weather-widget" id="current-weather-widget" style="display: none;">
+        <div class="widget-header">
+            <div class="widget-title">Погода сейчас</div>
+            <button class="widget-close" id="widget-close">&times;</button>
+        </div>
+        <div class="widget-content">
+            <div class="widget-location" id="widget-location">-</div>
+            <div class="widget-temp" id="widget-temp">-°C</div>
+            <img src="" alt="" class="widget-icon" id="widget-icon">
+            <div class="widget-desc" id="widget-desc">-</div>
+            <div class="widget-details">
+                <div class="widget-detail"><span>Ощущается:</span> <span id="widget-feels-like">-°C</span></div>
+                <div class="widget-detail"><span>Ветер:</span> <span id="widget-wind">- м/с</span></div>
+                <div class="widget-detail"><span>Влажность:</span> <span id="widget-humidity">-%</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Уведомление о погодном явлении -->
+    <div class="weather-alert" id="weather-alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="alert-message">Погодное предупреждение</span>
+        <button class="alert-close" id="alert-close">&times;</button>
+    </div>
+    
     <div class="container">
-        <h1><i class="fas fa-cloud-sun"></i> Погода в Ярославле и Лаптево</h1>
+        <h1><i class="fas fa-cloud-sun"></i> Погодное приложение</h1>
         
-        <div class="weather-container">
-            <!-- Ярославль -->
-            <div class="weather-card" id="yaroslavl-card">
-                <div class="weather-card-header">
-                    <div class="location"><i class="fas fa-city"></i> Ярославль</div>
-                    <div class="current-time" id="yaroslavl-time"></div>
-                </div>
-                <div class="tab-container">
-                    <div class="tab active" data-tab="current" data-location="yaroslavl">Сейчас</div>
-                    <div class="tab" data-tab="hourly" data-location="yaroslavl">Почасовой</div>
-                    <div class="tab" data-tab="daily" data-location="yaroslavl">На неделю</div>
-                </div>
-                
-                <div id="yaroslavl-weather">
-                    <div class="tab-content active" id="yaroslavl-current">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка данных...
-                        </div>
-                    </div>
-                    
-                    <div class="tab-content" id="yaroslavl-hourly">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка почасового прогноза...
-                        </div>
-                    </div>
-                    
-                    <div class="tab-content" id="yaroslavl-daily">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка недельного прогноза...
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="weather-card-footer">
-                    <div><i class="fas fa-map-marker-alt"></i> Широта: 57.63, Долгота: 39.89</div>
-                    <div><i class="fas fa-eye"></i> <span id="yaroslavl-visibility">-</span> м</div>
-                </div>
+        <!-- Панель управления городами -->
+        <div class="locations-control">
+            <h2><i class="fas fa-map-marked-alt"></i> Управление местоположениями</h2>
+            
+            <div class="location-type">
+                <label>
+                    <input type="radio" name="locationType" value="city" checked>
+                    <i class="fas fa-city"></i> Город
+                </label>
+                <label>
+                    <input type="radio" name="locationType" value="village">
+                    <i class="fas fa-home"></i> Деревня
+                </label>
+                <label>
+                    <input type="radio" name="locationType" value="other">
+                    <i class="fas fa-map-marker-alt"></i> Другое
+                </label>
             </div>
             
-            <!-- Лаптево -->
-            <div class="weather-card" id="laptevo-card">
-                <div class="weather-card-header">
-                    <div class="location"><i class="fas fa-home"></i> Лаптево (Ярославская обл.)</div>
-                    <div class="current-time" id="laptevo-time"></div>
-                </div>
-                <div class="tab-container">
-                    <div class="tab active" data-tab="current" data-location="laptevo">Сейчас</div>
-                    <div class="tab" data-tab="hourly" data-location="laptevo">Почасовой</div>
-                    <div class="tab" data-tab="daily" data-location="laptevo">На неделю</div>
-                </div>
-                
-                <div id="laptevo-weather">
-                    <div class="tab-content active" id="laptevo-current">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка данных...
-                        </div>
-                    </div>
-                    
-                    <div class="tab-content" id="laptevo-hourly">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка почасового прогноза...
-                        </div>
-                    </div>
-                    
-                    <div class="tab-content" id="laptevo-daily">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Загрузка недельного прогноза...
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="weather-card-footer">
-                    <div><i class="fas fa-map-marker-alt"></i> Широта: 57.47, Долгота: 39.66</div>
-                    <div><i class="fas fa-eye"></i> <span id="laptevo-visibility">-</span> м</div>
-                </div>
+            <div class="locations-form">
+                <input type="text" id="location-name" placeholder="Название места" required>
+                <input type="text" id="location-lat" placeholder="Широта (например: 57.63)" required>
+                <input type="text" id="location-lon" placeholder="Долгота (например: 39.89)" required>
+                <button id="add-location"><i class="fas fa-plus"></i> Добавить</button>
             </div>
+            <div class="coordinates-hint">
+                Координаты можно найти на <a href="https://www.google.com/maps" target="_blank">Google Maps</a> (клик правой кнопкой → "Что здесь?")
+            </div>
+            
+            <div class="saved-locations" id="saved-locations">
+                <!-- Здесь будут отображаться добавленные местоположения -->
+            </div>
+        </div>
+        
+        <div class="weather-container" id="weather-container">
+            <!-- Карточки погоды будут добавляться здесь динамически -->
         </div>
         
         <button class="refresh-btn" id="refresh-btn"><i class="fas fa-sync-alt"></i> Обновить данные</button>
@@ -924,12 +1212,6 @@
                 </ul>
             </div>
         </div>
-
-        <div class="api-key-info">
-            <strong><i class="fas fa-info-circle"></i> Важно:</strong> Для работы этого кода нужен бесплатный API-ключ с сайта 
-            <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a>. 
-            После регистрации вставьте ваш ключ в строку <code>const apiKey = 'ВАШ_КЛЮЧ';</code>
-        </div>
     </div>
     
     <div class="dark-mode-toggle" id="dark-mode-toggle">
@@ -947,37 +1229,296 @@
         // ВАЖНО: Замените этот ключ на свой бесплатный API-ключ от OpenWeatherMap
         const apiKey = '07c35e8e3b046470612ddd028efbf612'; // ← Замените здесь!
         
-        // Обновленные координаты (точные)
-        const locations = {
-            yaroslavl: { 
-                lat: 57.626559, 
-                lon: 39.893813, 
-                currentElemId: 'yaroslavl-current',
-                hourlyElemId: 'yaroslavl-hourly',
-                dailyElemId: 'yaroslavl-daily',
-                cardId: 'yaroslavl-card',
-                timeElemId: 'yaroslavl-time',
-                name: 'Ярославль',
-                visibilityElemId: 'yaroslavl-visibility'
-            },
-            laptevo: { 
-                lat: 57.474010, 
-                lon: 39.664204, 
-                currentElemId: 'laptevo-current',
-                hourlyElemId: 'laptevo-hourly',
-                dailyElemId: 'laptevo-daily',
-                cardId: 'laptevo-card',
-                timeElemId: 'laptevo-time',
-                name: 'Лаптево',
-                visibilityElemId: 'laptevo-visibility'
-            }
-        };
-
+        // Инициализация хранилища для местоположений
+        let locations = {};
+        
         // Глобальные переменные
         let weatherChart = null;
         let map = null;
         let markers = [];
         let lastUpdateTime = null;
+        let currentWidgetLocation = null;
+        
+        // Функция для загрузки сохраненных местоположений из localStorage
+        function loadSavedLocations() {
+            const savedLocations = localStorage.getItem('weatherLocations');
+            if (savedLocations) {
+                locations = JSON.parse(savedLocations);
+                renderSavedLocations();
+                renderWeatherCards();
+                fetchWeatherForAllLocations();
+            } else {
+                // Добавляем местоположения по умолчанию
+                addDefaultLocations();
+            }
+        }
+        
+        // Добавление местоположений по умолчанию
+        function addDefaultLocations() {
+            locations = {
+                'yaroslavl-57.63-39.89': { 
+                    id: 'yaroslavl-57.63-39.89',
+                    lat: 57.626559, 
+                    lon: 39.893813, 
+                    name: 'Ярославль',
+                    icon: 'city',
+                    type: 'city'
+                },
+                'laptevo-57.47-39.66': { 
+                    id: 'laptevo-57.47-39.66',
+                    lat: 57.474010, 
+                    lon: 39.664204, 
+                    name: 'Лаптево',
+                    icon: 'home',
+                    type: 'village'
+                }
+            };
+            saveLocations();
+            renderSavedLocations();
+            renderWeatherCards();
+            fetchWeatherForAllLocations();
+        }
+        
+        // Сохранение местоположений в localStorage
+        function saveLocations() {
+            localStorage.setItem('weatherLocations', JSON.stringify(locations));
+        }
+        
+        // Отображение списка сохраненных местоположений
+        function renderSavedLocations() {
+            const container = document.getElementById('saved-locations');
+            container.innerHTML = '';
+            
+            Object.values(locations).forEach(location => {
+                const tag = document.createElement('div');
+                tag.className = 'location-tag';
+                tag.innerHTML = `
+                    <i class="fas fa-${location.icon}"></i>
+                    ${location.name}
+                    <button class="remove-location" data-id="${location.id}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.appendChild(tag);
+                
+                // Добавляем обработчик клика для отображения в виджете
+                tag.addEventListener('click', () => {
+                    showWeatherWidget(location);
+                });
+            });
+            
+            // Добавляем обработчики для кнопок удаления
+            document.querySelectorAll('.remove-location').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const locationId = e.currentTarget.dataset.id;
+                    removeLocation(locationId);
+                });
+            });
+        }
+        
+        // Удаление местоположения
+        function removeLocation(locationId) {
+            // Если удаляем местоположение, которое отображается в виджете, скрываем виджет
+            if (currentWidgetLocation && currentWidgetLocation.id === locationId) {
+                hideWeatherWidget();
+            }
+            
+            delete locations[locationId];
+            saveLocations();
+            renderSavedLocations();
+            renderWeatherCards();
+            fetchWeatherForAllLocations();
+            updateMapMarkers();
+            showNotification(`Местоположение "${locationId}" удалено`);
+        }
+        
+        // Добавление нового местоположения
+        function addLocation() {
+            const nameInput = document.getElementById('location-name');
+            const latInput = document.getElementById('location-lat');
+            const lonInput = document.getElementById('location-lon');
+            const locationType = document.querySelector('input[name="locationType"]:checked').value;
+            
+            const name = nameInput.value.trim();
+            const lat = parseFloat(latInput.value.trim());
+            const lon = parseFloat(lonInput.value.trim());
+            
+            if (!name || isNaN(lat) || isNaN(lon)) {
+                showNotification('Пожалуйста, заполните все поля корректно', 3000);
+                return;
+            }
+            
+            // Валидация координат
+            if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+                showNotification('Некорректные координаты. Широта: -90 до 90, Долгота: -180 до 180', 3000);
+                return;
+            }
+            
+            // Создаем уникальный ID из названия и координат
+            const id = `${name.toLowerCase().replace(/\s+/g, '-')}-${lat.toFixed(2)}-${lon.toFixed(2)}`;
+            
+            // Проверяем, нет ли уже местоположения с такими координатами
+            const existingLocation = Object.values(locations).find(loc => 
+                loc.lat.toFixed(2) === lat.toFixed(2) && 
+                loc.lon.toFixed(2) === lon.toFixed(2)
+            );
+            
+            if (existingLocation) {
+                showNotification(`Местоположение с такими координатами уже существует: ${existingLocation.name}`, 3000);
+                return;
+            }
+            
+            // Определяем иконку в зависимости от типа
+            let icon;
+            switch(locationType) {
+                case 'city':
+                    icon = 'city';
+                    break;
+                case 'village':
+                    icon = 'home';
+                    break;
+                default:
+                    icon = 'map-marker-alt';
+            }
+            
+            // Добавляем новое местоположение
+            locations[id] = {
+                id: id,
+                lat: lat,
+                lon: lon,
+                name: name,
+                icon: icon,
+                type: locationType
+            };
+            
+            // Сохраняем и обновляем интерфейс
+            saveLocations();
+            renderSavedLocations();
+            renderWeatherCards();
+            fetchWeatherForAllLocations();
+            updateMapMarkers();
+            
+            // Очищаем поля ввода
+            nameInput.value = '';
+            latInput.value = '';
+            lonInput.value = '';
+            
+            showNotification(`Местоположение "${name}" добавлено`);
+        }
+        
+        // Создание карточек погоды для всех местоположений
+        function renderWeatherCards() {
+            const container = document.getElementById('weather-container');
+            container.innerHTML = '';
+            
+            Object.values(locations).forEach(location => {
+                const card = document.createElement('div');
+                card.className = 'weather-card';
+                card.id = `${location.id}-card`;
+                
+                card.innerHTML = `
+                    <div class="weather-card-header">
+                        <div class="location"><i class="fas fa-${location.icon}"></i> ${location.name}</div>
+                        <div class="current-time" id="${location.id}-time"></div>
+                    </div>
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="current" data-location="${location.id}">Сейчас</div>
+                        <div class="tab" data-tab="hourly" data-location="${location.id}">Почасовой</div>
+                        <div class="tab" data-tab="daily" data-location="${location.id}">На неделю</div>
+                    </div>
+                    
+                    <div id="${location.id}-weather">
+                        <div class="tab-content active" id="${location.id}-current">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i><br>
+                                Загрузка данных...
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="${location.id}-hourly">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i><br>
+                                Загрузка почасового прогноза...
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="${location.id}-daily">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i><br>
+                                Загрузка недельного прогноза...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="weather-card-footer">
+                        <div><i class="fas fa-map-marker-alt"></i> Широта: ${location.lat.toFixed(5)}, Долгота: ${location.lon.toFixed(5)}</div>
+                        <div><i class="fas fa-eye"></i> <span id="${location.id}-visibility">-</span> м</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            // Добавляем обработчики для вкладок
+            initTabs();
+        }
+        
+        // Инициализация вкладок
+        function initTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', async () => {
+                    const locationId = tab.dataset.location;
+                    const tabName = tab.dataset.tab;
+                    const locationData = locations[locationId];
+                    
+                    // Убираем активный класс у всех вкладок для этой локации
+                    document.querySelectorAll(`.tab[data-location="${locationId}"]`).forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Убираем активный класс у всех контентов для этой локации
+                    document.querySelectorAll(`#${locationId}-weather .tab-content`).forEach(c => {
+                        c.classList.remove('active');
+                    });
+                    
+                    // Добавляем активный класс к выбранной вкладке и контенту
+                    tab.classList.add('active');
+                    document.getElementById(`${locationId}-${tabName}`).classList.add('active');
+                    
+                    // Если данные еще не загружены, загружаем их
+                    const contentElement = document.getElementById(`${locationId}-${tabName}`);
+                    if (contentElement.innerHTML.includes('Загрузка')) {
+                        const timezoneOffset = await getTimezoneOffset(locationData);
+                        if (tabName === 'hourly') {
+                            await fetchHourlyForecast(locationData, timezoneOffset);
+                        } else if (tabName === 'daily') {
+                            await fetchDailyForecast(locationData, timezoneOffset);
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Загрузка погоды для всех местоположений
+        async function fetchWeatherForAllLocations() {
+            updateProgress(10);
+            
+            const promises = Object.values(locations).map(async location => {
+                const timezoneOffset = await fetchCurrentWeather(location);
+                if (timezoneOffset) {
+                    await fetchHourlyForecast(location, timezoneOffset);
+                    await fetchDailyForecast(location, timezoneOffset);
+                    
+                    // Проверяем погодные предупреждения
+                    checkWeatherAlerts(location);
+                }
+            });
+            
+            await Promise.all(promises);
+            updateLastUpdated();
+            updateProgress(100);
+        }
         
         // Функция для получения текущей погоды
         async function fetchCurrentWeather(location) {
@@ -990,21 +1531,24 @@
                 
                 if (data.cod === 200) {
                     displayCurrentWeather(data, location);
-                    updateCurrentTime(location.timeElemId, data.timezone);
-                    updateLastUpdated();
-                    updateVisibility(data.visibility, location.visibilityElemId);
-                    updateMap(data, location);
+                    updateCurrentTime(`${location.id}-time`, data.timezone);
+                    updateVisibility(data.visibility, `${location.id}-visibility`);
+                    updateMapWithWeatherData(data, location);
                     updateTemperatureChart();
+                    
+                    // Обновляем виджет, если он отображает текущее местоположение
+                    if (currentWidgetLocation && currentWidgetLocation.id === location.id) {
+                        updateWeatherWidget(data, location);
+                    }
+                    
                     return data.timezone;
                 } else {
-                    showError(location.currentElemId, data.message || 'Неизвестная ошибка');
+                    showError(`${location.id}-current`, data.message || 'Неизвестная ошибка');
                     return 0;
                 }
             } catch (error) {
-                showError(location.currentElemId, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
+                showError(`${location.id}-current`, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
                 return 0;
-            } finally {
-                updateProgress(100);
             }
         }
         
@@ -1018,17 +1562,15 @@
                 const data = await response.json();
                 
                 if (data.cod === "200") {
-                    displayHourlyForecast(data, location.hourlyElemId, timezoneOffset);
+                    displayHourlyForecast(data, `${location.id}-hourly`, timezoneOffset);
                     return data.list;
                 } else {
-                    showError(location.hourlyElemId, data.message || 'Неизвестная ошибка');
+                    showError(`${location.id}-hourly`, data.message || 'Неизвестная ошибка');
                     return null;
                 }
             } catch (error) {
-                showError(location.hourlyElemId, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
+                showError(`${location.id}-hourly`, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
                 return null;
-            } finally {
-                updateProgress(80);
             }
         }
         
@@ -1042,24 +1584,22 @@
                 const data = await response.json();
                 
                 if (data.cod === "200") {
-                    displayDailyForecast(data, location.dailyElemId, timezoneOffset);
+                    displayDailyForecast(data, `${location.id}-daily`, timezoneOffset);
                     return data.list;
                 } else {
-                    showError(location.dailyElemId, data.message || 'Неизвестная ошибка');
+                    showError(`${location.id}-daily`, data.message || 'Неизвестная ошибка');
                     return null;
                 }
             } catch (error) {
-                showError(location.dailyElemId, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
+                showError(`${location.id}-daily`, 'Ошибка подключения: проверьте API-ключ и интернет-соединение');
                 return null;
-            } finally {
-                updateProgress(90);
             }
         }
 
         // Функция для отображения текущей погоды
         function displayCurrentWeather(data, location) {
-            const element = document.getElementById(location.currentElemId);
-            const cardElement = document.getElementById(location.cardId);
+            const element = document.getElementById(`${location.id}-current`);
+            const cardElement = document.getElementById(`${location.id}-card`);
             const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
             
             // Устанавливаем класс в зависимости от типа погоды
@@ -1080,7 +1620,7 @@
                         <div class="description">${capitalizeFirstLetter(data.weather[0].description)}</div>
                         <div>Ощущается как: ${Math.round(data.main.feels_like)}°C</div>
                     </div>
-                    <img src="${iconUrl}" alt="${data.weather[0].description}" class="weather-icon">
+                    <img src="${iconUrl}" alt="${data.weather[0].description}" class="weather-icon ${getWeatherAnimationClass(data.weather[0].main, data.weather[0].icon)}">
                 </div>
                 <div class="details">
                     <div class="detail-item"><i class="fas fa-tint"></i> Влажность: ${data.main.humidity}%</div>
@@ -1119,7 +1659,7 @@
                 html += `
                     <div class="hourly-item">
                         <div class="hourly-time">${time}</div>
-                        <img src="${iconUrl}" alt="${item.weather[0].description}" class="hourly-icon">
+                        <img src="${iconUrl}" alt="${item.weather[0].description}" class="hourly-icon ${getWeatherAnimationClass(item.weather[0].main, item.weather[0].icon)}">
                         <div class="hourly-temp">${Math.round(item.main.temp)}°C</div>
                         <div class="hourly-wind"><i class="fas fa-wind"></i> ${item.wind.speed} м/с</div>
                     </div>
@@ -1184,7 +1724,7 @@
                 html += `
                     <div class="daily-item">
                         <div class="daily-day">${day}</div>
-                        <img src="${iconUrl}" alt="${dailyData[day].weather[0]}" class="daily-icon">
+                        <img src="${iconUrl}" alt="${dailyData[day].weather[0]}" class="daily-icon ${getWeatherAnimationClass(dailyData[day].weather[0].toLowerCase().includes('дождь') ? 'Rain' : dailyData[day].weather[0].toLowerCase().includes('снег') ? 'Snow' : 'Clouds', mostCommonIcon)}">
                         <div class="daily-temp">
                             <span class="daily-high">${maxTemp}°</span>
                             <span class="daily-low">${minTemp}°</span>
@@ -1220,6 +1760,22 @@
             };
             
             return weatherMap[weatherMain] || '';
+        }
+        
+        // Определяем класс анимации для иконки погоды
+        function getWeatherAnimationClass(weatherMain, iconCode) {
+            // Иконки с солнцем анимируем вращением
+            if (iconCode.includes('01')) return 'animated sun-animation';
+            // Иконки с дождем анимируем падением
+            if (weatherMain === 'Rain' || weatherMain === 'Drizzle') return 'animated rain-animation';
+            // Иконки со снегом анимируем падением с вращением
+            if (weatherMain === 'Snow') return 'animated snow-animation';
+            // Иконки с грозой анимируем мерцанием
+            if (weatherMain === 'Thunderstorm') return 'animated thunder-animation';
+            // Иконки с облаками анимируем легким движением
+            if (weatherMain === 'Clouds') return 'animated cloud-animation';
+            
+            return '';
         }
 
         // Показать ошибку
@@ -1266,11 +1822,22 @@
         
         // Инициализация карты
         function initMap() {
-            const center = {lat: (locations.yaroslavl.lat + locations.laptevo.lat) / 2, 
-                           lng: (locations.yaroslavl.lon + locations.laptevo.lon) / 2};
+            // Центрируем карту по первому местоположению или по среднему, если их несколько
+            let center;
+            const locationValues = Object.values(locations);
+            
+            if (locationValues.length === 0) {
+                center = {lat: 57.63, lng: 39.89}; // Ярославль по умолчанию
+            } else if (locationValues.length === 1) {
+                center = {lat: locationValues[0].lat, lng: locationValues[0].lon};
+            } else {
+                const avgLat = locationValues.reduce((sum, loc) => sum + loc.lat, 0) / locationValues.length;
+                const avgLng = locationValues.reduce((sum, loc) => sum + loc.lon, 0) / locationValues.length;
+                center = {lat: avgLat, lng: avgLng};
+            }
             
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 10,
+                zoom: locationValues.length > 1 ? 10 : 12,
                 center: center,
                 styles: [
                     {
@@ -1454,40 +2021,72 @@
             });
             
             // Добавляем маркеры для каждого местоположения
-            addMarkers();
+            updateMapMarkers();
         }
         
-        // Добавление маркеров на карту
-        function addMarkers() {
+        // Обновление маркеров на карте
+        function updateMapMarkers() {
+            if (!map) return;
+            
             // Удаляем старые маркеры, если они есть
             markers.forEach(marker => marker.setMap(null));
             markers = [];
             
-            // Добавляем маркер для Ярославля
-            const yaroslavlMarker = new google.maps.Marker({
-                position: {lat: locations.yaroslavl.lat, lng: locations.yaroslavl.lon},
-                map: map,
-                title: 'Ярославль',
-                icon: {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            // Добавляем маркеры для каждого местоположения
+            Object.values(locations).forEach(location => {
+                // Определяем цвет маркера в зависимости от типа местоположения
+                let markerColor;
+                switch(location.type) {
+                    case 'city':
+                        markerColor = 'red'; // Красный для городов
+                        break;
+                    case 'village':
+                        markerColor = 'blue'; // Синий для деревень
+                        break;
+                    default:
+                        markerColor = 'green'; // Зеленый для других типов
                 }
+                
+                const marker = new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lon},
+                    map: map,
+                    title: location.name,
+                    icon: {
+                        url: `https://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`
+                    }
+                });
+                
+                // Создаем информационное окно для маркера
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="min-width: 150px;">
+                            <h3 style="margin: 0 0 5px 0; color: ${document.body.classList.contains('dark-mode') ? '#4cc9f0' : '#4361ee'};">${location.name}</h3>
+                            <p style="margin: 0;"><i class="fas fa-map-marker-alt"></i> Широта: ${location.lat.toFixed(5)}</p>
+                            <p style="margin: 0;"><i class="fas fa-map-marker-alt"></i> Долгота: ${location.lon.toFixed(5)}</p>
+                        </div>
+                    `
+                });
+                
+                // Добавляем обработчики для маркера
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+                
+                markers.push(marker);
             });
-            markers.push(yaroslavlMarker);
             
-            // Добавляем маркер для Лаптево
-            const laptevoMarker = new google.maps.Marker({
-                position: {lat: locations.laptevo.lat, lng: locations.laptevo.lon},
-                map: map,
-                title: 'Лаптево',
-                icon: {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                }
-            });
-            markers.push(laptevoMarker);
+            // Если есть местоположения, центрируем карту так, чтобы все маркеры были видны
+            if (markers.length > 0) {
+                const bounds = new google.maps.LatLngBounds();
+                markers.forEach(marker => {
+                    bounds.extend(marker.getPosition());
+                });
+                map.fitBounds(bounds);
+            }
         }
         
         // Обновление карты с данными о погоде
-        function updateMap(data, location) {
+        function updateMapWithWeatherData(data, location) {
             if (!map) return;
             
             // Находим маркер для этого местоположения
@@ -1497,7 +2096,7 @@
             );
             
             if (marker) {
-                // Создаем информационное окно
+                // Обновляем информационное окно с данными о погоде
                 const infoWindow = new google.maps.InfoWindow({
                     content: `
                         <div style="min-width: 150px;">
@@ -1509,7 +2108,7 @@
                     `
                 });
                 
-                // Добавляем обработчик клика на маркер
+                // Обновляем обработчик клика на маркер
                 marker.addListener('click', () => {
                     infoWindow.open(map, marker);
                 });
@@ -1529,18 +2128,25 @@
             weatherChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Ярославль', 'Лаптево'],
+                    labels: Object.values(locations).map(loc => loc.name),
                     datasets: [{
                         label: 'Температура (°C)',
-                        data: [15, 14], // Заглушка, реальные данные будут подгружены
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 99, 132, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 99, 132, 1)'
-                        ],
+                        data: Array(Object.keys(locations).length).fill(0), // Заглушка, реальные данные будут подгружены
+                        backgroundColor: Object.values(locations).map(loc => {
+                            // Разные цвета для разных типов местоположений
+                            switch(loc.type) {
+                                case 'city': return 'rgba(255, 99, 132, 0.2)';
+                                case 'village': return 'rgba(54, 162, 235, 0.2)';
+                                default: return 'rgba(75, 192, 192, 0.2)';
+                            }
+                        }),
+                        borderColor: Object.values(locations).map(loc => {
+                            switch(loc.type) {
+                                case 'city': return 'rgba(255, 99, 132, 1)';
+                                case 'village': return 'rgba(54, 162, 235, 1)';
+                                default: return 'rgba(75, 192, 192, 1)';
+                            }
+                        }),
                         borderWidth: 2,
                         tension: 0.1
                     }]
@@ -1586,25 +2192,22 @@
             if (!weatherChart) return;
             
             try {
-                // Получаем текущую погоду для обоих местоположений
-                const yaroslavlUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${locations.yaroslavl.lat}&lon=${locations.yaroslavl.lon}&appid=${apiKey}&units=metric`;
-                const laptevoUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${locations.laptevo.lat}&lon=${locations.laptevo.lon}&appid=${apiKey}&units=metric`;
+                // Получаем текущую погоду для всех местоположений
+                const promises = Object.values(locations).map(location => {
+                    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}&units=metric`;
+                    return fetch(url).then(res => res.json());
+                });
                 
-                const [yaroslavlRes, laptevoRes] = await Promise.all([
-                    fetch(yaroslavlUrl),
-                    fetch(laptevoUrl)
-                ]);
+                const results = await Promise.all(promises);
                 
-                const [yaroslavlData, laptevoData] = await Promise.all([
-                    yaroslavlRes.json(),
-                    laptevoRes.json()
-                ]);
-                
-                if (yaroslavlData.cod === 200 && laptevoData.cod === 200) {
-                    weatherChart.data.datasets[0].data = [
-                        Math.round(yaroslavlData.main.temp),
-                        Math.round(laptevoData.main.temp)
-                    ];
+                const validData = results.filter(data => data.cod === 200);
+                if (validData.length > 0) {
+                    weatherChart.data.labels = validData.map((data, index) => 
+                        Object.values(locations)[index].name
+                    );
+                    weatherChart.data.datasets[0].data = validData.map(data => 
+                        Math.round(data.main.temp)
+                    );
                     weatherChart.update();
                 }
             } catch (error) {
@@ -1623,6 +2226,63 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, duration);
+        }
+        
+        // Показать уведомление о погодном явлении
+        function showWeatherAlert(message, type = 'warning', duration = 5000) {
+            const alert = document.getElementById('weather-alert');
+            const alertMessage = document.getElementById('alert-message');
+            
+            alert.className = `weather-alert ${type}`;
+            alertMessage.textContent = message;
+            alert.classList.add('show');
+            
+            // Автоматическое скрытие через указанное время
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, duration);
+        }
+        
+        // Проверка погодных предупреждений
+        function checkWeatherAlerts(location) {
+            const cardElement = document.getElementById(`${location.id}-card`);
+            if (!cardElement) return;
+            
+            const weatherClass = cardElement.className.split(' ')[1];
+            
+            // Проверяем тип погоды и показываем соответствующие предупреждения
+            switch(weatherClass) {
+                case 'thunderstorm':
+                    showWeatherAlert(`Гроза в ${location.name}! Будьте осторожны.`, 'danger');
+                    break;
+                case 'rainy':
+                    showWeatherAlert(`Дождь в ${location.name}. Не забудьте зонт!`, 'warning');
+                    break;
+                case 'snowy':
+                    showWeatherAlert(`Снег в ${location.name}. Осторожно на дорогах!`, 'warning');
+                    break;
+                case 'sunny':
+                    // Проверяем UV индекс для предупреждения о солнце
+                    const uvElement = document.querySelector(`#${location.id}-current .detail-item:nth-child(5)`);
+                    if (uvElement) {
+                        const uvText = uvElement.textContent;
+                        const uvIndex = parseInt(uvText.match(/\d+/));
+                        if (uvIndex >= 6) {
+                            showWeatherAlert(`Высокий UV индекс (${uvIndex}) в ${location.name}. Используйте солнцезащитный крем!`, 'warning');
+                        }
+                    }
+                    break;
+            }
+            
+            // Проверяем скорость ветра
+            const windElement = document.querySelector(`#${location.id}-current .detail-item:nth-child(2)`);
+            if (windElement) {
+                const windText = windElement.textContent;
+                const windSpeed = parseFloat(windText.match(/\d+\.?\d*/));
+                if (windSpeed >= 10) {
+                    showWeatherAlert(`Сильный ветер (${windSpeed} м/с) в ${location.name}. Будьте осторожны!`, 'warning');
+                }
+            }
         }
         
         // Обновление прогресс-бара
@@ -1644,108 +2304,6 @@
             }
         }
         
-        // Загружаем погоду при загрузке страницы
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Показываем скелетоны загрузки
-            document.querySelectorAll('.tab-content.active').forEach(el => {
-                el.innerHTML = `
-                    <div class="skeleton" style="height: 30px; width: 80%; margin-bottom: 15px;"></div>
-                    <div class="skeleton" style="height: 60px; width: 100%; margin-bottom: 15px;"></div>
-                    <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 10px;"></div>
-                    <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 10px;"></div>
-                    <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 10px;"></div>
-                    <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 10px;"></div>
-                `;
-            });
-            
-            // Загружаем данные для каждого местоположения
-            const promises = Object.values(locations).map(async location => {
-                const timezoneOffset = await fetchCurrentWeather(location);
-                if (timezoneOffset) {
-                    await fetchHourlyForecast(location, timezoneOffset);
-                    await fetchDailyForecast(location, timezoneOffset);
-                }
-            });
-            
-            await Promise.all(promises);
-            
-            // Обновляем время сразу
-            updateLastUpdated();
-            
-            // Показываем уведомление о успешной загрузке
-            showNotification('Данные о погоде успешно загружены!');
-            
-            // Инициализация темного режима
-            initDarkMode();
-        });
-        
-        // Кнопка обновления
-        document.getElementById('refresh-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('refresh-btn');
-            btn.classList.add('refreshing');
-            btn.disabled = true;
-            
-            try {
-                // Загружаем данные для каждого местоположения
-                const promises = Object.values(locations).map(async location => {
-                    document.getElementById(location.currentElemId).innerHTML = `
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i><br>
-                            Обновление данных...
-                        </div>
-                    `;
-                    
-                    const timezoneOffset = await fetchCurrentWeather(location);
-                    if (timezoneOffset) {
-                        await fetchHourlyForecast(location, timezoneOffset);
-                        await fetchDailyForecast(location, timezoneOffset);
-                    }
-                });
-                
-                await Promise.all(promises);
-                
-                // Показываем уведомление о успешном обновлении
-                showNotification('Данные успешно обновлены!');
-            } finally {
-                btn.classList.remove('refreshing');
-                btn.disabled = false;
-            }
-        });
-        
-        // Переключение между вкладками
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', async () => {
-                const location = tab.dataset.location;
-                const tabName = tab.dataset.tab;
-                const locationData = locations[location];
-                
-                // Убираем активный класс у всех вкладок для этой локации
-                document.querySelectorAll(`.tab[data-location="${location}"]`).forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Убираем активный класс у всех контентов для этой локации
-                document.querySelectorAll(`#${location}-weather .tab-content`).forEach(c => {
-                    c.classList.remove('active');
-                });
-                
-                // Добавляем активный класс к выбранной вкладке и контенту
-                tab.classList.add('active');
-                document.getElementById(`${location}-${tabName}`).classList.add('active');
-                
-                // Если данные еще не загружены, загружаем их
-                const contentElement = document.getElementById(`${location}-${tabName}`);
-                if (contentElement.innerHTML.includes('Загрузка')) {
-                    const timezoneOffset = await getTimezoneOffset(locationData);
-                    if (tabName === 'hourly') {
-                        await fetchHourlyForecast(locationData, timezoneOffset);
-                    } else if (tabName === 'daily') {
-                        await fetchDailyForecast(locationData, timezoneOffset);
-                    }
-                }
-            });
-        });
-        
         // Получение часового пояса для местоположения
         async function getTimezoneOffset(location) {
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}`;
@@ -1757,6 +2315,48 @@
             } catch (error) {
                 return 0;
             }
+        }
+        
+        // Показать виджет "Погода сейчас"
+        function showWeatherWidget(location) {
+            currentWidgetLocation = location;
+            const widget = document.getElementById('current-weather-widget');
+            widget.style.display = 'block';
+            
+            // Обновляем данные в виджете
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}&units=metric&lang=ru`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        updateWeatherWidget(data, location);
+                    }
+                });
+        }
+        
+        // Обновить данные в виджете "Погода сейчас"
+        function updateWeatherWidget(data, location) {
+            document.getElementById('widget-location').textContent = location.name;
+            document.getElementById('widget-temp').textContent = `${Math.round(data.main.temp)}°C`;
+            document.getElementById('widget-desc').textContent = capitalizeFirstLetter(data.weather[0].description);
+            document.getElementById('widget-feels-like').textContent = `${Math.round(data.main.feels_like)}°C`;
+            document.getElementById('widget-wind').textContent = `${data.wind.speed} м/с`;
+            document.getElementById('widget-humidity').textContent = `${data.main.humidity}%`;
+            
+            const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+            const widgetIcon = document.getElementById('widget-icon');
+            widgetIcon.src = iconUrl;
+            widgetIcon.alt = data.weather[0].description;
+            
+            // Добавляем анимацию в зависимости от типа погоды
+            widgetIcon.className = 'widget-icon ' + getWeatherAnimationClass(data.weather[0].main, data.weather[0].icon);
+        }
+        
+        // Скрыть виджет "Погода сейчас"
+        function hideWeatherWidget() {
+            document.getElementById('current-weather-widget').style.display = 'none';
+            currentWidgetLocation = null;
         }
         
         // Инициализация темного режима
@@ -1815,13 +2415,48 @@
             });
         }
         
-        // Автоматическое обновление данных каждые 10 минут
-        setInterval(async () => {
-            if (lastUpdateTime && (new Date() - lastUpdateTime) > 10 * 60 * 1000) {
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', () => {
+            // Загружаем сохраненные местоположения
+            loadSavedLocations();
+            
+            // Инициализация темного режима
+            initDarkMode();
+            
+            // Обработчик кнопки добавления местоположения
+            document.getElementById('add-location').addEventListener('click', addLocation);
+            
+            // Обработчик кнопки обновления
+            document.getElementById('refresh-btn').addEventListener('click', async () => {
                 const btn = document.getElementById('refresh-btn');
-                btn.click();
-            }
-        }, 60 * 1000);
+                btn.classList.add('refreshing');
+                btn.disabled = true;
+                
+                try {
+                    await fetchWeatherForAllLocations();
+                    showNotification('Данные успешно обновлены!');
+                } finally {
+                    btn.classList.remove('refreshing');
+                    btn.disabled = false;
+                }
+            });
+            
+            // Обработчик закрытия виджета
+            document.getElementById('widget-close').addEventListener('click', hideWeatherWidget);
+            
+            // Обработчик закрытия уведомления о погодном явлении
+            document.getElementById('alert-close').addEventListener('click', () => {
+                document.getElementById('weather-alert').classList.remove('show');
+            });
+            
+            // Автоматическое обновление данных каждые 10 минут
+            setInterval(async () => {
+                if (lastUpdateTime && (new Date() - lastUpdateTime) > 10 * 60 * 1000) {
+                    const btn = document.getElementById('refresh-btn');
+                    btn.click();
+                }
+            }, 60 * 1000);
+        });
     </script>
 </body>
 </html>
